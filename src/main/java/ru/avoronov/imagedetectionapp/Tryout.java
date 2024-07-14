@@ -1,25 +1,28 @@
 package ru.avoronov.imagedetectionapp;
 
 import jakarta.annotation.PostConstruct;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.avoronov.imagedetectionapp.files.ImageFileLoader;
+import ru.avoronov.imagedetectionapp.files.ImageFileSaver;
+
+import java.awt.image.BufferedImage;
 
 @Component
+@RequiredArgsConstructor
 public class Tryout {
+
+    private static final int DEFAULT_SCREEN_NUM = 1;
+
+    private final ScreenCaptureService screenCaptureService;
+    private final ImageFileSaver imageFileSaver;
+    private final ImageFileLoader imageFileLoader;
 
     @PostConstruct
     public void test() {
+        BufferedImage screenshot = screenCaptureService.captureScreen(DEFAULT_SCREEN_NUM);
+        BufferedImage imageToFind = imageFileLoader.loadInternalImage("test2.jpg");
 
-        Mat imageMatrix = loadImage("C:\\Users\\a.voronov\\IdeaProjects\\ImageDetection\\src\\main\\resources\\Screenshot_47.jpg");
-        saveImage(imageMatrix, "C:\\Users\\a.voronov\\IdeaProjects\\ImageDetection\\src\\main\\resources\\test2.jpg");
-    }
-
-    public Mat loadImage(String imagePath) {
-        return Imgcodecs.imread(imagePath);
-    }
-
-    public void saveImage(Mat imageMatrix, String targetPath) {
-        Imgcodecs.imwrite(targetPath, imageMatrix);
+//        imageFileSaver.saveImage(bufferedImage, "screenshot103");
     }
 }
